@@ -9,38 +9,54 @@
 
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Press Start 2P', cursive;
       background: url('https://i.imgur.com/9yqvVZx.png') repeat-x;
       background-color: #5c94fc;
-      background-size: auto 100%;
-      color: #fff;
+      background-size: contain;
+      color: white;
       text-align: center;
     }
 
-    h1 {
-      font-size: 22px;
-      padding-top: 60px;
+    header {
+      padding: 50px 20px 20px;
       color: yellow;
-      text-shadow: 2px 2px #000;
+      text-shadow: 3px 3px #000;
+      font-size: 18px;
     }
 
     .container {
-      max-width: 700px;
-      margin: auto;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 30px;
+      max-width: 900px;
+      margin: 20px auto;
+      background: rgba(0,0,0,0.6);
+      padding: 25px;
       border: 3px solid yellow;
       border-radius: 20px;
-      margin-top: 60px;
+    }
+
+    h2 {
+      color: #fff;
+      font-size: 16px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px #000;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 10px 0;
+      font-size: 12px;
     }
 
     .button {
       background-color: red;
       color: white;
-      padding: 15px 25px;
-      font-size: 14px;
-      margin: 10px;
+      padding: 12px 20px;
+      font-size: 12px;
+      margin: 10px 5px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -48,33 +64,57 @@
     }
 
     .button:hover {
-      background-color: #c00000;
+      background-color: darkred;
     }
 
-    .info {
-      font-size: 12px;
-      margin-top: 20px;
+    footer {
+      margin-top: 40px;
+      font-size: 10px;
+      color: #fff;
+      text-shadow: 1px 1px #000;
     }
   </style>
 </head>
 <body>
 
-  <h1>🍄 SuperMarioToken is Live!</h1>
+  <header>
+    🍄 SuperMarioToken is Here! <br>
+    Jump into the Blockchain World!
+  </header>
 
   <div class="container">
-    <p>🚀 Fairlaunch on BNB Chain</p>
-    <p>🎮 No Presale • 100B Total Supply</p>
-    <p>💰 5% Sell Tax → into Liquidity</p>
-    <p>🏆 Limited to 3B per wallet (until 0.00000065$)</p>
+    <h2>🚀 Tokenomics</h2>
+    <ul>
+      <li>Total Supply: 100,000,000,000 MARIO</li>
+      <li>60% Liquidity Pool</li>
+      <li>25% Staking</li>
+      <li>10% Reserved</li>
+      <li>5% Airdrop & Marketing</li>
+      <li>5% Sell Tax → Into Liquidity</li>
+      <li>Wallet Limit: 3B (removed at 0.00000065$)</li>
+    </ul>
 
-    <button class="button" onclick="window.open('https://t.me/SuperMarioToken')">Join Telegram</button>
-    <button class="button" onclick="window.open('https://dexscreener.com')">View Chart</button>
+    <h2>🗺️ Roadmap</h2>
+    <ul>
+      <li>✅ Launch on BNB Chain</li>
+      <li>✅ Liquidity Added</li>
+      <li>🔜 Staking Platform</li>
+      <li>🔜 Meme Campaign</li>
+      <li>🔜 CEX Listings</li>
+      <li>🔜 GameFi: Collect MARIO Coins!</li>
+    </ul>
 
-    <div class="info">
-      <p>Staking and more coming soon!</p>
-      <p>Power up your wallet like Mario 💪</p>
+    <div>
+      <button class="button" onclick="window.open('https://t.me/SuperMarioToken')">📢 Telegram</button>
+      <button class="button" onclick="window.open('https://dexscreener.com')">📈 Chart</button>
+      <button class="button" onclick="alert('Coming soon: Buy MARIO!')">🛒 Buy MARIO</button>
     </div>
   </div>
 
+  <footer>
+    SuperMarioToken © 2025 • Not Affiliated with Nintendo • Just for Fun & Crypto Fans 🎮
+  </footer>
+
 </body>
 </html>
+
