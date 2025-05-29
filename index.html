@@ -10,9 +10,8 @@
     body {
       margin: 0;
       font-family: 'Press Start 2P', cursive;
-      background: url('https://i.imgur.com/9yqvVZx.png') repeat-x;
-      background-color: #5c94fc;
-      background-size: contain;
+      background: #5c94fc url('DEIN-BILD-HIER.png') no-repeat center top;
+      background-size: cover;
       color: white;
       text-align: center;
     }
@@ -21,15 +20,15 @@
       padding: 50px 20px 20px;
       color: yellow;
       text-shadow: 3px 3px #000;
-      font-size: 18px;
+      font-size: 20px;
     }
 
     .container {
       max-width: 900px;
       margin: 20px auto;
-      background: rgba(0,0,0,0.6);
-      padding: 25px;
-      border: 3px solid yellow;
+      background: rgba(0,0,0,0.7);
+      padding: 30px;
+      border: 4px solid yellow;
       border-radius: 20px;
     }
 
@@ -54,7 +53,7 @@
     .button {
       background-color: red;
       color: white;
-      padding: 12px 20px;
+      padding: 12px 25px;
       font-size: 12px;
       margin: 10px 5px;
       border: none;
@@ -73,17 +72,29 @@
       color: #fff;
       text-shadow: 1px 1px #000;
     }
+
+    @media (max-width: 600px) {
+      header {
+        font-size: 16px;
+      }
+
+      .button {
+        width: 80%;
+        margin: 10px auto;
+        display: block;
+      }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    🍄 SuperMarioToken is Here! <br>
+    🍄 SuperMarioToken is Live! <br>
     Jump into the Blockchain World!
   </header>
 
   <div class="container">
-    <h2>🚀 Tokenomics</h2>
+    <h2>🪙 Tokenomics</h2>
     <ul>
       <li>Total Supply: 100,000,000,000 MARIO</li>
       <li>60% Liquidity Pool</li>
@@ -91,7 +102,7 @@
       <li>10% Reserved</li>
       <li>5% Airdrop & Marketing</li>
       <li>5% Sell Tax → Into Liquidity</li>
-      <li>Wallet Limit: 3B (removed at 0.00000065$)</li>
+      <li>Wallet Limit: 3B (until 0.00000065$)</li>
     </ul>
 
     <h2>🗺️ Roadmap</h2>
@@ -107,7 +118,7 @@
     <div>
       <button class="button" onclick="window.open('https://t.me/SuperMarioToken')">📢 Telegram</button>
       <button class="button" onclick="window.open('https://dexscreener.com')">📈 Chart</button>
-      <button class="button" onclick="alert('Coming soon: Buy MARIO!')">🛒 Buy MARIO</button>
+      <button class="button" onclick="alert('Buy coming soon!')">🛒 Buy MARIO</button>
     </div>
   </div>
 
