@@ -1,131 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SuperMarioToken</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-    body {
-      margin: 0;
-      font-family: 'Press Start 2P', cursive;
-      background: #5c94fc url('mario.webp') no-repeat center top;
-      background-size: cover;
-      color: white;
-      text-align: center;
-    }
-
-    header {
-      padding: 50px 20px 20px;
-      color: yellow;
-      text-shadow: 3px 3px #000;
-      font-size: 20px;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 20px auto;
-      background: rgba(0,0,0,0.3);
-      padding: 30px;
-      border: 4px solid yellow;
-      border-radius: 20px;
-    }
-
-    h2 {
-      color: #fff;
-      font-size: 16px;
-      margin-top: 20px;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px #000;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      margin: 10px 0;
-      font-size: 12px;
-    }
-
-    .button {
-      background-color: red;
-      color: white;
-      padding: 12px 25px;
-      font-size: 12px;
-      margin: 10px 5px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 2px 2px 5px #000;
-    }
-
-    .button:hover {
-      background-color: darkred;
-    }
-
-    footer {
-      margin-top: 40px;
-      font-size: 10px;
-      color: #fff;
-      text-shadow: 1px 1px #000;
-    }
-
-    @media (max-width: 600px) {
-      header {
-        font-size: 16px;
-      }
-
-      .button {
-        width: 80%;
-        margin: 10px auto;
-        display: block;
-      }
-    }
-  </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Super Mario</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            color: #333;
+        }
+        header {
+            background: #d32f2f;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        header p {
+            font-size: 1.2rem;
+            color: #ffeb3b;
+        }
+        .section {
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        .section h2 {
+            color: #d32f2f;
+        }
+        .dex-link {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #fbc02d;
+            color: #333;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .whitepaper {
+            background: #fff;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background: #424242;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        img.logo {
+            max-width: 150px;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            .dex-link {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <img src="Speedy.png" alt="Speedy Logo" class="logo" />
+        <h1>Super Mario</h1>
+        <p>The Funist Meme Token on BNB</p>
+        <div style="margin-top: 1rem;">
+            <a href="#" style="background: #0088cc; color: white; padding: 0.6rem 1.5rem; margin: 0 0.5rem; text-decoration: none; border-radius: 6px; font-weight: bold;">Telegram</a>
+            <a href="#" style="background: #1da1f2; color: white; padding: 0.6rem 1.5rem; margin: 0 0.5rem; text-decoration: none; border-radius: 6px; font-weight: bold;">Twitter</a>
+      </div>
 
-  <header>
-    🍄 SuperMarioToken is Live! <br>
-    Jump into the Blockchain World!
-  </header>
+    </header>
 
-  <div class="container">
-    <h2>🪙 Tokenomics</h2>
-    <ul>
-      <li>Total Supply: 100,000,000,000 MARIO</li>
-      <li>60% Liquidity Pool</li>
-      <li>25% Staking</li>
-      <li>10% Reserved</li>
-      <li>5% Airdrop & Marketing</li>
-      <li>5% Sell Tax → Into Liquidity</li>
-      <li>Wallet Limit: 3B (until 0.00000065$)</li>
-    </ul>
+    <div class="section">
+        <h2>Join the Race!</h2>
+        <p>Speedy Token (SPD) is here to bring energy and fun into crypto. Fair launch, no presale, pure speed!</p>
+        <a href="#" class="dex-link">View on DEX (Coming Soon)</a>
+        <a href="#" class="dex-link" style="background: #d32f2f; color: #ffeb3b; margin-left: 1rem;">Staking (Coming Soon)</a>
 
-    <h2>🗺️ Roadmap</h2>
-    <ul>
-      <li>✅ Launch on BNB Chain</li>
-      <li>✅ Liquidity Added</li>
-      <li>🔜 Staking Platform</li>
-      <li>🔜 Meme Campaign</li>
-      <li>🔜 CEX Listings</li>
-      <li>🔜 GameFi: Collect MARIO Coins!</li>
-    </ul>
 
-    <div>
-      <button class="button" onclick="window.open('')">📢 Telegram</button>
-      <button class="button" onclick="window.open('')">📈 Chart</button>
-      <button class="button" onclick="alert('Buy coming soon!')">🛒 Buy MARIO</button>
     </div>
-  </div>
+<div style="background: #fff8e1; border-left: 6px solid #fbc02d; padding: 2rem; margin: 2rem auto; max-width: 900px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #d32f2f; margin-top: 0;">Liquidity Growth Strategy</h2>
 
-  <footer>
-    SuperMarioToken © 2025 • Not Affiliated with Nintendo • Just for Fun & Crypto Fans 🎮
-  </footer>
+    <p>
+        Super Mario Token  starts with a fair and focused launch: <strong>10B SPD</strong> in liquidity.
+        This allows a higher starting price and rapid momentum during the early stages.
+    </p>
+<div style="background: #fff; padding: 2rem; border-radius: 10px; margin-top: 1rem;">
+  <canvas id="spdChart" style="max-width: 100%;"></canvas>
+</div>
+
+    <p>
+        Instead of releasing all tokens at once, we follow a smart phased approach:
+        <strong>small portions of SPD will be sold at higher prices</strong> (e.g., 500M–1B),
+        and the revenue is used to add <strong>another 5B SMT + BNB</strong> back into the liquidity pool.
+    </p>
+
+    <p>
+        This cycle repeats step-by-step until the full liquidity goal is achieved – 
+        creating steady growth, price stability, and community trust.
+    </p>
+
+    <ul style="text-align: left; padding-left: 1.2rem; color: #333; line-height: 1.6;">
+        <li><strong>✅ Fair Launch:</strong> Only 10B SMT in the initial pool</li>
+        <li><strong>🔁 Self-funded Expansion:</strong> More liquidity after each milestone</li>
+        <li><strong>🛡️ Anti-Dump:</strong> No team sell-offs or early unlocks</li>
+        <li><strong>🔍 Full Transparency:</strong> All LP injections will be visible & announced</li>
+    </ul>
+
+    <p style="margin-top: 1rem;">
+        With this dynamic model, Speedy grows fast, fair, and under full control.
+    </p>
+</div>
+
+
+    <div class="whitepaper">
+        <h2>Tokenomics</h2>
+<table style="width: 100%; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color: #fbc02d; color: #333;">
+            <th style="padding: 10px; border: 1px solid #ccc;">Allocation</th>
+            <th style="padding: 10px; border: 1px solid #ccc;">Amount (SMT)</th>
+            <th style="padding: 10px; border: 1px solid #ccc;">Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ccc;">💧 Liquidity Pool</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">65,000,000,000</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">65%</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ccc;">🧱 Staking (Team Finance)</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">30,000,000,000</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">30%</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ccc;">🎁 Reserve (Airdrops, Marketing, Burn)</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">5,000,000,000</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">5%</td>
+        </tr>
+    </tbody>
+</table>
+
+<p style="margin-top: 2rem;">
+    <strong>Tax & Mechanics:</strong><br />
+    • 5% sell tax is automatically added to liquidity<br />
+    • Tax drops to 3% at 1M USD Market Cap, and to 0% at 3M Market Cap<br />
+    • Wallet limit: Max 3B SMT per wallet (limit removed above $0.00000065)
+</p>
+     <div style="background: #fff3e0; border-left: 6px solid #d32f2f; padding: 2rem; margin: 2rem auto; max-width: 900px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #d32f2f; margin-top: 0;">Why Speedy Uses These Protections</h2>
+    <p>
+        <strong>⏳ Minimum Holding Period:</strong><br />
+        To protect against bots and instant dumps, each wallet must hold newly purchased SMT tokens for at least <strong>5 days</strong> before they can be sold.<br />
+        This rule ensures stability and encourages long-term holding.
+    </p>
+
+    <p>
+        Super Mario Token (SMT) is more than just a meme – it’s built for long-term growth and community trust.
+        To prevent bots, unfair launches, and pump-and-dump behavior, several smart mechanisms were added:
+    </p>
+
+    <ul style="text-align: left; padding-left: 1.2rem; color: #333; line-height: 1.6;">
+        <li><strong>🛡️ 5% Sell Tax:</strong> Every sell adds to the liquidity pool. This blocks bot abuse and keeps the price floor stable.</li>
+        <li><strong>📉 Tax Reduction System:</strong> Tax drops to 3% at $1M MC and 0% at $3M – rewarding holders and growth.</li>
+        <li><strong>🚫 No Presale:</strong> Everyone starts equally. No backdoors. No unfair advantages.</li>
+        <li><strong>📊 Wallet Limit:</strong> Max 3B SMT per wallet (until $0.00000065 is reached) – stopping whales from dumping early.</li>
+        <li><strong>⛓️ Long-Term Focus:</strong> Mario is built to last. These protections ensure fair play, safety, and serious potential.</li>
+    </ul>
+
+    <p style="margin-top: 1rem;">
+        These protections are not restrictions – they are your shield. Built for fairness. Designed for Mario.
+    </p>
+</div>
+   
+
+        <p>
+            <strong>Vision:</strong><br />
+            Mario Token is a meme-powered movement designed to build a strong community through fun, speed, and sustainable tokenomics. With no presale and a clear roadmap, SMT aims to attract both meme lovers and serious holders.
+        </p>
+        <p>
+            <strong>Roadmap:</strong><br />
+            • Launch and Liquidity<br />
+            • Community Building<br />
+            • Airdrops and Listings<br />
+            • Staking Integration<br />
+            • CEX Applications (LBank, Gate.io, etc.)<br />
+            • Long-Term Meme Partnerships
+        </p>
+    </div>
+
+    <footer>
+        &copy; 2025 Super Mario Token. All rights reserved.
+       
+    </footer>
+    <script>
+  const ctx = document.getElementById('spdChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [
+        'Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','Phase 6',
+        'Phase 7','Phase 8','Phase 9','Phase 10','Phase 11','Phase 12'
+      ],
+      datasets: [
+        {
+          label: 'SMT in Pool (B)',
+          data: [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65],
+          borderColor: '#d32f2f',
+          backgroundColor: 'rgba(211,47,47,0.1)',
+          yAxisID: 'y1'
+        },
+        {
+          label: 'Liquidity (USD)',
+          data: [2500, 4000, 7200, 13700, 26800, 33000, 39000, 46000, 52000, 58000, 63000, 72000],
+          borderColor: '#1976d2',
+          backgroundColor: 'rgba(25,118,210,0.1)',
+          yAxisID: 'y2'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      stacked: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'SMT Supply and Liquidity Growth Over Time'
+        }
+      },
+      scales: {
+        y1: {
+          type: 'linear',
+          position: 'left',
+          title: {
+            display: true,
+            text: 'SMT in Pool (B)'
+          }
+        },
+        y2: {
+          type: 'linear',
+          position: 'right',
+          title: {
+            display: true,
+            text: 'Liquidity (USD)'
+          },
+          grid: {
+            drawOnChartArea: false
+          }
+        }
+      }
+    }
+  });
+</script>
 
 </body>
 </html>
-
