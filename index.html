@@ -15,7 +15,9 @@
 
   <!-- Twitter conversion tracking -->
   <script>
-    !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+    !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);},s.version='1.1',s.queue=[],
+    u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+    a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
     twq('config','q3v9c');
   </script>
 
@@ -36,6 +38,8 @@
       background-size: cover;
       color: var(--text-color);
       line-height: 1.6;
+      /* zusätzlichen horizontalen Abstand hinzufügen */
+      padding: 0 1rem;
     }
     header {
       font-family: var(--font-header);
@@ -63,7 +67,7 @@
     main {
       max-width: 900px;
       margin: auto;
-      padding: 2rem 1rem;
+      padding: 2rem 0;
       display: flex;
       flex-direction: column;
       gap: 2rem;
@@ -129,6 +133,7 @@
       border-radius: 6px;
       font-family: monospace;
       color: var(--text-color);
+      word-break: break-all;
     }
 
     .tokenomics-table {
@@ -159,6 +164,8 @@
       padding: 1.5rem;
       border-radius: 10px;
       margin: 1rem 0;
+      /* horizontales Scrollen erlauben, falls zu breit */
+      overflow-x: auto;
     }
     #smtChart {
       width: 100% !important;
@@ -167,15 +174,47 @@
 
     footer {
       text-align: center;
-      padding: 2rem;
+      padding: 2rem 0;
       background: rgba(0,0,0,0.5);
       color: var(--text-muted);
       font-size: .9rem;
       font-family: var(--font-body);
     }
-    @media (max-width: 600px) {
+
+    /* --- Mobile-Anpassungen --- */
+    @media (max-width: 768px) {
       header h1 { font-size: 2rem; }
-      .btn { padding: .8rem 1.5rem; font-size: 1rem; }
+      header p  { font-size: 1rem; }
+
+      main {
+        padding: 1.5rem 0;
+      }
+      .card {
+        margin: 0 0.5rem;
+        padding: 1.5rem;
+      }
+      .btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+      }
+      .tokenomics-table, #chart-container {
+        /* wenn Tabelle oder Chart doch mal zu breit ist */
+        display: block;
+        width: 100%;
+      }
+    }
+    @media (max-width: 480px) {
+      header { padding: 3rem 0.5rem; }
+      header h1 { font-size: 1.75rem; }
+      .social-links { flex-direction: column; gap: 0.5rem; }
+      .card {
+        margin: 0 0.25rem;
+        padding: 1rem;
+      }
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -183,7 +222,7 @@
   <header>
     <img src="Super-Mario.png" alt="SMT Logo" class="logo">
     <h1>Super Mario</h1>
-    <p>The Funist Meme Token on BNB</p>
+    <p>The Funnest Meme Token on BNB</p>
     <div class="social-links">
       <a href="https://t.me/supermariotoken2025" target="_blank" class="social-link telegram">Telegram</a>
       <a href="https://x.com/super_mari26524" target="_blank" class="social-link twitter">Twitter</a>
@@ -228,7 +267,7 @@
           <tr><th>Allocation</th><th>Amount (SMT)</th><th>Percentage</th></tr>
         </thead>
         <tbody>
-          <tr><td>Liquidity Pool</td><td>130,000,000,000</td><td>65%(some Burn)</td></tr>
+          <tr><td>Liquidity Pool</td><td>130,000,000,000</td><td>65% (some Burn)</td></tr>
           <tr><td>Staking</td><td>60,000,000,000</td><td>30%</td></tr>
           <tr><td>Reserve</td><td>10,000,000,000</td><td>5%</td></tr>
         </tbody>
@@ -236,7 +275,6 @@
       <p style="margin-top:1rem; text-align:left; color:var(--text-color);">
         <strong>Tax & Mechanics:</strong><br>
         • NO TAX<br>
-         
       </p>
     </section>
 
@@ -244,7 +282,6 @@
     <section class="card">
       <h2>Protections</h2>
       <p><strong>No Presale:</strong> Everyone starts equally.</p>
-      
       <p><strong>Long-Term Focus:</strong> Built for lasting growth.</p>
     </section>
 
@@ -300,3 +337,4 @@
   </script>
 </body>
 </html>
+
