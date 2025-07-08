@@ -31,16 +31,22 @@
       --color-red: #e52521;
       --color-card-bg: rgba(30, 30, 30, 0.7);
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: var(--font-body);
       background: url('mario-frinds.jpg') repeat-x top center;
       background-size: cover;
       color: var(--text-color);
       line-height: 1.6;
-      /* zusätzlichen horizontalen Abstand hinzufügen */
-      padding: 0 1rem;
+      padding: 0 1rem; /* horizontaler Abstand */
     }
+
     header {
       font-family: var(--font-header);
       background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('mario.webp') center/cover no-repeat;
@@ -51,7 +57,13 @@
     header .logo { width: 150px; margin-bottom: 1rem; }
     header h1 { font-size: 2.5rem; text-shadow: 4px 4px 0 var(--color-red); }
     header p { font-size: 1.2rem; color: var(--color-yellow); font-weight: 600; }
-    .social-links { margin-top: 2rem; display: flex; justify-content: center; gap: 1rem; }
+
+    .social-links {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
     .social-link {
       padding: 0.75rem 1.5rem;
       border-radius: 8px;
@@ -72,6 +84,7 @@
       flex-direction: column;
       gap: 2rem;
     }
+
     .card {
       background: var(--color-card-bg);
       border-radius: 15px;
@@ -90,6 +103,7 @@
       font-family: var(--font-body);
       font-size: 1rem;
     }
+
     .button-group {
       display: flex;
       justify-content: center;
@@ -136,35 +150,12 @@
       word-break: break-all;
     }
 
-    .tokenomics-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      font-family: var(--font-body);
-      color: var(--text-color);
-    }
-    .tokenomics-table th,
-    .tokenomics-table td {
-      padding: 1rem;
-      border: 1px solid rgba(255,255,255,0.2);
-      text-align: left;
-    }
-    .tokenomics-table thead {
-      background: var(--color-yellow);
-    }
-    .tokenomics-table thead th {
-      color: #121212;
-    }
-    .tokenomics-table tbody tr:nth-child(even) {
-      background: rgba(0,0,0,0.2);
-    }
-
+    /* Chart-Container */
     #chart-container {
       background: #ffffff;
       padding: 1.5rem;
       border-radius: 10px;
       margin: 1rem 0;
-      /* horizontales Scrollen erlauben, falls zu breit */
       overflow-x: auto;
     }
     #smtChart {
@@ -181,7 +172,39 @@
       font-family: var(--font-body);
     }
 
-    /* --- Mobile-Anpassungen --- */
+    /* Wrapper für horizontales Scrollen der Tokenomics-Tabelle */
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tokenomics-table {
+      width: 100%;
+      min-width: 600px;      /* an Spaltenanzahl anpassen */
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-top: 1rem;
+      font-family: var(--font-body);
+      color: var(--text-color);
+    }
+    .tokenomics-table th,
+    .tokenomics-table td {
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      text-align: left;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+    .tokenomics-table thead {
+      background: var(--color-yellow);
+    }
+    .tokenomics-table thead th {
+      color: #121212;
+    }
+    .tokenomics-table tbody tr:nth-child(even) {
+      background: rgba(0,0,0,0.2);
+    }
+
+    /* Mobile-Anpassungen */
     @media (max-width: 768px) {
       header h1 { font-size: 2rem; }
       header p  { font-size: 1rem; }
@@ -197,8 +220,8 @@
         padding: 0.8rem 1.5rem;
         font-size: 0.95rem;
       }
-      .tokenomics-table, #chart-container {
-        /* wenn Tabelle oder Chart doch mal zu breit ist */
+      .table-wrapper,
+      #chart-container {
         display: block;
         width: 100%;
       }
@@ -214,6 +237,13 @@
       .btn {
         width: 100%;
         text-align: center;
+      }
+      .table-wrapper {
+        margin: 0 -0.5rem;
+        padding: 0 0.5rem;
+      }
+      .tokenomics-table {
+        min-width: 500px;
       }
     }
   </style>
@@ -235,8 +265,11 @@
       <h2>Join the Race!</h2>
       <p>Super Mario Token (SMT) is here to bring energy and fun into crypto. Fair launch, no presale, pure speed!</p>
       <div class="button-group">
-        <a href="https://pancakeswap.finance/swap?outputCurrency=0x5D636a3b495ac15e3C8180cb462e1302fa4D01f1&chain=bnb" class="btn btn-primary" target="_blank" onclick="twq('event','tw-q3v9c-q3v9d');">🚀 Buy Now!</a>
-        <a href="https://www.team.finance/view-coin/0x5d636a3b495AC15e3C8180cb462E1302Fa4D01f1?name=SuperMarioToken&symbol=SMT&chainid=0x38" class="btn btn-secondary" target="_blank">Staking SMT</a>
+        <a href="https://pancakeswap.finance/swap?outputCurrency=0x5D636a3b495ac15e3C8180cb462e1302fa4D01f1&chain=bnb"
+           class="btn btn-primary" target="_blank"
+           onclick="twq('event','tw-q3v9c-q3v9d');">🚀 Buy Now!</a>
+        <a href="https://www.team.finance/view-coin/0x5d636a3b495AC15e3C8180cb462E1302Fa4D01f1?name=SuperMarioToken&symbol=SMT&chainid=0x38"
+           class="btn btn-secondary" target="_blank">Staking SMT</a>
       </div>
       <div class="contract-address">
         <p>📝 Contract Address:</p>
@@ -262,16 +295,34 @@
     <!-- Tokenomics -->
     <section class="card">
       <h2>Tokenomics</h2>
-      <table class="tokenomics-table">
-        <thead>
-          <tr><th>Allocation</th><th>Amount (SMT)</th><th>Percentage</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Liquidity Pool</td><td>130,000,000,000</td><td>65% (some Burn)</td></tr>
-          <tr><td>Staking</td><td>60,000,000,000</td><td>30%</td></tr>
-          <tr><td>Reserve</td><td>10,000,000,000</td><td>5%</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="tokenomics-table">
+          <thead>
+            <tr>
+              <th>Allocation</th>
+              <th>Amount (SMT)</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Liquidity Pool</td>
+              <td>130,000,000,000</td>
+              <td>65% (some Burn)</td>
+            </tr>
+            <tr>
+              <td>Staking</td>
+              <td>60,000,000,000</td>
+              <td>30%</td>
+            </tr>
+            <tr>
+              <td>Reserve</td>
+              <td>10,000,000,000</td>
+              <td>5%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <p style="margin-top:1rem; text-align:left; color:var(--text-color);">
         <strong>Tax & Mechanics:</strong><br>
         • NO TAX<br>
@@ -293,7 +344,6 @@
     </section>
   </main>
 
-  <!-- Footer -->
   <footer>&copy; 2025 Super Mario Token. All rights reserved.</footer>
 
   <!-- Chart Initialization -->
