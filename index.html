@@ -521,7 +521,9 @@
       document.getElementById("smt-status").innerText = "❌ Error";
     }
   };
-   async function switchToBSC() {
+  <!-- SLOT 2 CODE START -->
+<script>
+async function switchToBSC() {
   const chainId = await window.ethereum.request({ method: 'eth_chainId' });
   if (chainId !== '0x38') {
     try {
@@ -562,6 +564,7 @@ window.addEventListener('load', async () => {
 
   connectBtn2.onclick = async () => {
     if (window.ethereum) {
+      await switchToBSC();
       web3_2 = new Web3(window.ethereum);
       try {
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
@@ -570,7 +573,7 @@ window.addEventListener('load', async () => {
         statusText2.textContent = 'Connected: ' + userAccount2;
         playBtn2.disabled = false;
       } catch (err) {
-        statusText2.textContent = 'Connection failed.';
+        statusText2.textContent = '❌ Connection failed.';
       }
     } else {
       statusText2.textContent = 'MetaMask not found.';
@@ -578,8 +581,6 @@ window.addEventListener('load', async () => {
   };
 
   playBtn2.onclick = async () => {
-    await switchToBSC(); // <-- Kette vor dem Spielen wechseln
-
     if (!slotContract2) return;
     try {
       statusText2.textContent = 'Playing...';
@@ -587,28 +588,40 @@ window.addEventListener('load', async () => {
 
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      await slotContract2.methods.play().send({
+      slotContract2.methods.play().send({
         from: userAccount2,
-        value: web3_2.utils.toWei('0.02', 'ether'),
-        gas: 300000,
-        gasPrice: web3_2.utils.toWei('5', 'gwei')
+        value: web3_2.utils.toWei('0.02', 'ether')
+      })
+      .on('receipt', function(receipt) {
+        const events = receipt.events;
+        if (events && events.SlotResult) {
+          const won = events.SlotResult.returnValues.won;
+          const amount = events.SlotResult.returnValues.amountWon;
+
+          if (won === true || won === "true") {
+            statusText2.textContent = `🎉 You won ${amount / 1e18} SMT!`;
+            slotReel2.textContent = '🍄🍄🍄';
+          } else {
+            statusText2.textContent = '😢 Try again!';
+            slotReel2.textContent = '💀💀💀';
+          }
+        } else {
+          statusText2.textContent = '❌ No event data.';
+        }
+      })
+      .on('error', function(error) {
+        console.error(error);
+        statusText2.textContent = '❌ Transaction failed.';
+        slotReel2.textContent = '💣💣💣';
       });
-
-
-
-      statusText2.textContent = 'Slot played!';
-      slotReel2.textContent = '🍄🍄🍄';
     } catch (error) {
       console.error(error);
-      statusText2.textContent = 'Transaction failed.';
-      slotReel2.textContent = '💣💣💣';
+      statusText2.textContent = '❌ Error during play.';
     }
   };
 });
-// SLOT 2 CODE END
-
 </script>
-
+<!-- SLOT 2 CODE END -->
 
 </body>
 </html>
