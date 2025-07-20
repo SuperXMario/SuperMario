@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -556,34 +557,17 @@ window.addEventListener('load', async () => {
 
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      slotContract2.methods.play().send({
-  from: userAccount2,
-  value: web3_2.utils.toWei('0.02', 'ether')
-})
-.on('receipt', function(receipt) {
-  const events = receipt.events;
-  if (events && events.SlotResult) {
-    const won = events.SlotResult.returnValues.won;
-    const amount = events.SlotResult.returnValues.amountWon;
+      await slotContract2.methods.play().send({
+        from: userAccount2,
+        value: web3_2.utils.toWei('0.02', 'ether'),
+        gas: 300000,
+        gasPrice: web3_2.utils.toWei('5', 'gwei')
+      });
 
-    if (won === true || won === "true") {
-      statusText2.textContent = `🎉 You won ${amount / 1e18} SMT!`;
+
+
+      statusText2.textContent = 'Slot played!';
       slotReel2.textContent = '🍄🍄🍄';
-    } else {
-      statusText2.textContent = '❌ You lost. Try again!';
-      slotReel2.textContent = '💣💣💣';
-    }
-  } else {
-    statusText2.textContent = '✅ Slot played.';
-    slotReel2.textContent = '❔❔❔';
-  }
-})
-.on('error', function(error) {
-  console.error(error);
-  statusText2.textContent = '❌ Transaction failed.';
-  slotReel2.textContent = '🕳️🕳️🕳️';
-});
-
     } catch (error) {
       console.error(error);
       statusText2.textContent = 'Transaction failed.';
