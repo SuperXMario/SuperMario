@@ -257,7 +257,20 @@
       <a href="https://t.me/supermariotoken2025" target="_blank" class="social-link telegram">Telegram</a>
       <a href="https://x.com/super_mari26524" target="_blank" class="social-link twitter">Twitter</a>
     </div>
-  </header>
+      <!-- SMT Slot Module: START -->
+    <div id="smt-slot" style="background:rgba(30,30,30,0.7);border:2px solid #FFD700;border-radius:8px;padding:1rem;margin:2rem auto;max-width:300px;text-align:center;">
+    <h3 style="font-family:'Press Start 2P';color:#FFD700;margin-bottom:0.5rem;">🎰 SMT Slot</h3>
+    <button id="smt-connect" style="width:100%;margin:0.5rem 0;padding:0.75rem;border:none;border-radius:6px;cursor:pointer;background:#FFD700;color:#121212;font-weight:700;">
+      Connect Wallet
+    </button>
+    <button id="smt-play" disabled style="width:100%;margin:0.5rem 0;padding:0.75rem;border:none;border-radius:6px;cursor:pointer;background:#FFD700;color:#121212;font-weight:700;opacity:0.6;">
+      Play (0.01 BNB)
+    </button>
+    <p id="smt-status" style="font-size:0.9rem;color:#ffffff;">Bitte verbinden</p>
+   </div>
+   <!-- SMT Slot Module: END -->
+
+</header>
 
   <main>
     <!-- Join the Race -->
@@ -386,6 +399,50 @@
       }
     });
   </script>
+    <!-- SMT Slot Web3-Script: START -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <script>
+    const SLOT_ADDRESS = "0x3a05A65f5883A7DC67499ED3476068C13Cb2c803";
+    const SLOT_ABI = [
+      {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
+      {"anonymous":false,"inputs":[
+        {"indexed":true,"internalType":"address","name":"player","type":"address"},
+        {"indexed":false,"internalType":"bool","name":"win","type":"bool"},
+        {"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}
+      ],"name":"Played","type":"event"},
+      {"inputs":[],"name":"play","outputs":[],"stateMutability":"payable","type":"function"}
+    ];
+    let web3 = new Web3(window.ethereum);
+    let slotContract, userAccount;
+
+    document.getElementById("smt-connect").onclick = async () => {
+      if (!window.ethereum) return alert("Bitte MetaMask installieren");
+      await ethereum.request({ method: "eth_requestAccounts" });
+      const accounts = await web3.eth.getAccounts();
+      userAccount = accounts[0];
+      slotContract = new web3.eth.Contract(SLOT_ABI, SLOT_ADDRESS);
+      document.getElementById("smt-status").innerText =
+        userAccount.slice(0,6) + "..." + userAccount.slice(-4);
+      document.getElementById("smt-play").disabled = false;
+    };
+
+    document.getElementById("smt-play").onclick = async () => {
+      const value = web3.utils.toWei("0.01","ether");
+      document.getElementById("smt-status").innerText = "🎲 Spinning...";
+      try {
+        const tx = await slotContract.methods.play().send({ from: userAccount, value });
+        const { win, reward } = tx.events.Played.returnValues;
+        document.getElementById("smt-status").innerText = win
+          ? `🎉 You won ${reward} SMT!`
+          : "😢 Try again!";
+      } catch (e) {
+        console.error(e);
+        document.getElementById("smt-status").innerText = "❌ Error";
+      }
+    };
+  </script>
+  <!-- SMT Slot Web3-Script: END -->
+
 </body>
 </html>
 
