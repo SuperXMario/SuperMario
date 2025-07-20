@@ -423,8 +423,47 @@
     ],"name":"Played","type":"event"},
     {"inputs":[],"name":"play","outputs":[],"stateMutability":"payable","type":"function"}
   ];
+  const SLOT2_ADDRESS = "0xe73f294D9C568e3F8E3110D5cbFE680Ba6e21Dbf";
+  const SLOT2_ABI = [
+  {
+    "inputs": [{"internalType":"address","name":"_smtToken","type":"address"}],
+    "stateMutability":"nonpayable","type":"constructor"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {"indexed":true,"internalType":"address","name":"player","type":"address"},
+      {"indexed":false,"internalType":"bool","name":"win","type":"bool"},
+      {"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}
+    ],
+    "name":"Played","type":"event"
+  },
+  {
+    "inputs":[],"name":"play","outputs":[],"stateMutability":"payable","type":"function"
+  }
+];
+
 
   let web3 = new Web3(window.ethereum);
+  let slotContract2;
+  let userAccount2;
+
+  async function initSlot2() {
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    userAccount2 = accounts[0];
+    slotContract2 = new web3.eth.Contract(SLOT2_ABI, SLOT2_ADDRESS);
+    document.getElementById("smt2-status").innerText = "✅ Connected!";
+}
+  document.getElementById("smt2-connect").onclick = async () => {
+  try {
+    await initSlot2();
+    document.getElementById("smt2-play").disabled = false;
+  } catch (e) {
+    console.error(e);
+    document.getElementById("smt2-status").innerText = "❌ Connection failed";
+  }
+};
+
   let slotContract, userAccount;
 
   function getLastWinTime(wallet) {
@@ -477,6 +516,58 @@
       document.getElementById("smt-status").innerText = "❌ Error";
     }
   };
+    // SLOT 2 CODE START
+window.addEventListener('load', async () => {
+  const connectBtn2 = document.getElementById('smt2-connect');
+  const playBtn2 = document.getElementById('smt2-play');
+  const statusText2 = document.getElementById('smt2-status');
+  const slotReel2 = document.getElementById('slot2-reel');
+
+  let userAccount2;
+  let web3_2;
+  let slotContract2;
+
+  connectBtn2.onclick = async () => {
+    if (window.ethereum) {
+      web3_2 = new Web3(window.ethereum);
+      try {
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        userAccount2 = accounts[0];
+        slotContract2 = new web3_2.eth.Contract(SLOT2_ABI, SLOT2_ADDRESS);
+        statusText2.textContent = 'Connected: ' + userAccount2;
+        playBtn2.disabled = false;
+      } catch (err) {
+        statusText2.textContent = 'Connection failed.';
+      }
+    } else {
+      statusText2.textContent = 'MetaMask not found.';
+    }
+  };
+
+  playBtn2.onclick = async () => {
+    if (!slotContract2) return;
+    try {
+      statusText2.textContent = 'Playing...';
+      slotReel2.textContent = '🎰🎰🎰';
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      await slotContract2.methods.play().send({
+        from: userAccount2,
+        value: web3_2.utils.toWei('0.02', 'ether')
+      });
+
+      statusText2.textContent = 'Slot played!';
+      slotReel2.textContent = '🍄🍄🍄';
+    } catch (error) {
+      console.error(error);
+      statusText2.textContent = 'Transaction failed.';
+      slotReel2.textContent = '💣💣💣';
+    }
+  };
+});
+// SLOT 2 CODE END
+
 </script>
 
 
