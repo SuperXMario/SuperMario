@@ -447,8 +447,8 @@
 
 
   let web3 = new Web3(window.ethereum);
-  let slotContract2;
-  let userAccount2;
+  let slotContract, slotContract2, userAccount, userAccount2;
+
 
   async function initSlot2() {
     const accounts = await ethereum.request({ method: "eth_requestAccounts" });
@@ -468,7 +468,7 @@
   }
 };
 
-  let slotContract, userAccount;
+  
 
   function getLastWinTime(wallet) {
     const timestamp = localStorage.getItem("slot-win-" + wallet);
