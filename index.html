@@ -402,46 +402,72 @@
     <!-- SMT Slot Web3-Script: START -->
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
   <script>
-    const SLOT_ADDRESS = "0x3a05A65f5883A7DC67499ED3476068C13Cb2c803";
-    const SLOT_ABI = [
-      {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
-      {"anonymous":false,"inputs":[
-        {"indexed":true,"internalType":"address","name":"player","type":"address"},
-        {"indexed":false,"internalType":"bool","name":"win","type":"bool"},
-        {"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}
-      ],"name":"Played","type":"event"},
-      {"inputs":[],"name":"play","outputs":[],"stateMutability":"payable","type":"function"}
-    ];
-    let web3 = new Web3(window.ethereum);
-    let slotContract, userAccount;
+  const SLOT_ADDRESS = "0x3a05A65f5883A7DC67499ED3476068C13Cb2c803";
+  const SLOT_ABI = [
+    {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
+    {"anonymous":false,"inputs":[
+      {"indexed":true,"internalType":"address","name":"player","type":"address"},
+      {"indexed":false,"internalType":"bool","name":"win","type":"bool"},
+      {"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}
+    ],"name":"Played","type":"event"},
+    {"inputs":[],"name":"play","outputs":[],"stateMutability":"payable","type":"function"}
+  ];
 
-    document.getElementById("smt-connect").onclick = async () => {
-      if (!window.ethereum) return alert("Bitte MetaMask installieren");
-      await ethereum.request({ method: "eth_requestAccounts" });
-      const accounts = await web3.eth.getAccounts();
-      userAccount = accounts[0];
-      slotContract = new web3.eth.Contract(SLOT_ABI, SLOT_ADDRESS);
-      document.getElementById("smt-status").innerText =
-        userAccount.slice(0,6) + "..." + userAccount.slice(-4);
-      document.getElementById("smt-play").disabled = false;
-    };
+  let web3 = new Web3(window.ethereum);
+  let slotContract, userAccount;
 
-    document.getElementById("smt-play").onclick = async () => {
-      const value = web3.utils.toWei("0.01","ether");
-      document.getElementById("smt-status").innerText = "🎲 Spinning...";
-      try {
-        const tx = await slotContract.methods.play().send({ from: userAccount, value });
-        const { win, reward } = tx.events.Played.returnValues;
-        document.getElementById("smt-status").innerText = win
-          ? `🎉 You won ${reward} SMT!`
-          : "😢 Try again!";
-      } catch (e) {
-        console.error(e);
-        document.getElementById("smt-status").innerText = "❌ Error";
+  function getLastWinTime(wallet) {
+    const timestamp = localStorage.getItem("slot-win-" + wallet);
+    return timestamp ? parseInt(timestamp) : 0;
+  }
+
+  function setLastWinTime(wallet) {
+    const now = Math.floor(Date.now() / 1000);
+    localStorage.setItem("slot-win-" + wallet, now.toString());
+  }
+
+  function canWin(wallet) {
+    const lastWin = getLastWinTime(wallet);
+    const now = Math.floor(Date.now() / 1000);
+    return (now - lastWin) >= 172800; // 48h = 172800 seconds
+  }
+
+  document.getElementById("smt-connect").onclick = async () => {
+    if (!window.ethereum) return alert("Bitte MetaMask installieren");
+    await ethereum.request({ method: "eth_requestAccounts" });
+    const accounts = await web3.eth.getAccounts();
+    userAccount = accounts[0];
+    slotContract = new web3.eth.Contract(SLOT_ABI, SLOT_ADDRESS);
+    document.getElementById("smt-status").innerText =
+      userAccount.slice(0,6) + "..." + userAccount.slice(-4);
+    document.getElementById("smt-play").disabled = false;
+  };
+
+  document.getElementById("smt-play").onclick = async () => {
+    const value = web3.utils.toWei("0.01","ether");
+    document.getElementById("smt-status").innerText = "🎲 Spinning...";
+
+    try {
+      const tx = await slotContract.methods.play().send({ from: userAccount, value });
+      const { win, reward } = tx.events.Played.returnValues;
+
+      if (win) {
+        if (!canWin(userAccount)) {
+          document.getElementById("smt-status").innerText = "⏳ Wait 48h before next win!";
+          return;
+        }
+        setLastWinTime(userAccount);
+        document.getElementById("smt-status").innerText = `🎉 You won ${reward} SMT!`;
+      } else {
+        document.getElementById("smt-status").innerText = "😢 Try again!";
       }
-    };
-  </script>
-  <!-- SMT Slot Web3-Script: END -->
+    } catch (e) {
+      console.error(e);
+      document.getElementById("smt-status").innerText = "❌ Error";
+    }
+  };
+</script>
+
 
 </body>
 </html>
