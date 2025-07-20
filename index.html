@@ -520,36 +520,6 @@
       document.getElementById("smt-status").innerText = "❌ Error";
     }
   };
-    // === SWITCH TO BNB CHAIN ===
-async function switchToBSC() {
-  const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-  if (chainId !== '0x38') {
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x38' }],
-      });
-    } catch (switchError) {
-      if (switchError.code === 4902) {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [{
-            chainId: '0x38',
-            chainName: 'BNB Smart Chain',
-            nativeCurrency: {
-              name: 'BNB',
-              symbol: 'BNB',
-              decimals: 18
-            },
-            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-            blockExplorerUrls: ['https://bscscan.com']
-          }]
-        });
-      }
-    }
-  }
-}
-
     // SLOT 2 CODE START
 window.addEventListener('load', async () => {
   const connectBtn2 = document.getElementById('smt2-connect');
@@ -579,44 +549,52 @@ window.addEventListener('load', async () => {
   };
 
   playBtn2.onclick = async () => {
-  await switchToBSC(); // ✅ Netzwerk automatisch auf BNB Chain setzen
+    if (!slotContract2) return;
+    try {
+      statusText2.textContent = 'Playing...';
+      slotReel2.textContent = '🎰🎰🎰';
 
-  if (!slotContract2) return;
-  try {
-    statusText2.textContent = 'Playing...';
-    slotReel2.textContent = '🎰🎰🎰';
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+      slotContract2.methods.play().send({
+  from: userAccount2,
+  value: web3_2.utils.toWei('0.02', 'ether')
+})
+.on('receipt', function(receipt) {
+  const events = receipt.events;
+  if (events && events.SlotResult) {
+    const won = events.SlotResult.returnValues.won;
+    const amount = events.SlotResult.returnValues.amountWon;
 
-    slotContract2.methods.play().send({
-      from: userAccount2,
-      value: web3_2.utils.toWei('0.02', 'ether')
-    })
-    .on('receipt', function(receipt) {
-      const events = receipt.events;
-      if (events && events.SlotResult) {
-        const won = events.SlotResult.returnValues.won;
-        const amount = events.SlotResult.returnValues.amountWon;
-
-        if (won === true || won === "true") {
-          statusText2.textContent = `🎉 You won ${amount / 1e18} SMT!`;
-          slotReel2.textContent = '🍄🍄🍄';
-        } else {
-          statusText2.textContent = '😢 No win this time.';
-          slotReel2.textContent = '💀💀💀';
-        }
-      }
-    });
-  } catch (error) {
-    console.error(error);
-    statusText2.textContent = 'Transaction failed.';
-    slotReel2.textContent = '🔮🔮🔮';
+    if (won === true || won === "true") {
+      statusText2.textContent = `🎉 You won ${amount / 1e18} SMT!`;
+      slotReel2.textContent = '🍄🍄🍄';
+    } else {
+      statusText2.textContent = '❌ You lost. Try again!';
+      slotReel2.textContent = '💣💣💣';
+    }
+  } else {
+    statusText2.textContent = '✅ Slot played.';
+    slotReel2.textContent = '❔❔❔';
   }
-};
+})
+.on('error', function(error) {
+  console.error(error);
+  statusText2.textContent = '❌ Transaction failed.';
+  slotReel2.textContent = '🕳️🕳️🕳️';
+});
 
+    } catch (error) {
+      console.error(error);
+      statusText2.textContent = 'Transaction failed.';
+      slotReel2.textContent = '💣💣💣';
+    }
+  };
+});
 // SLOT 2 CODE END
 
 </script>
+
+
 </body>
 </html>
-
