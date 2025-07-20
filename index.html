@@ -523,36 +523,7 @@
   };
   <!-- SLOT 2 CODE START -->
 <script>
-async function switchToBSC() {
-  const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-  if (chainId !== '0x38') {
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x38' }],
-      });
-    } catch (switchError) {
-      if (switchError.code === 4902) {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [{
-            chainId: '0x38',
-            chainName: 'BNB Smart Chain',
-            nativeCurrency: {
-              name: 'BNB',
-              symbol: 'BNB',
-              decimals: 18
-            },
-            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-            blockExplorerUrls: ['https://bscscan.com']
-          }]
-        });
-      }
-    }
-  }
-}
-
-window.addEventListener('load', async () => {
+window.addEventListener('DOMContentLoaded', async () => {
   const connectBtn2 = document.getElementById('smt2-connect');
   const playBtn2 = document.getElementById('smt2-play');
   const statusText2 = document.getElementById('smt2-status');
@@ -561,6 +532,35 @@ window.addEventListener('load', async () => {
   let userAccount2;
   let web3_2;
   let slotContract2;
+
+  async function switchToBSC() {
+    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    if (chainId !== '0x38') {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x38' }],
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: '0x38',
+              chainName: 'BNB Smart Chain',
+              nativeCurrency: {
+                name: 'BNB',
+                symbol: 'BNB',
+                decimals: 18
+              },
+              rpcUrls: ['https://bsc-dataseed.binance.org/'],
+              blockExplorerUrls: ['https://bscscan.com']
+            }]
+          });
+        }
+      }
+    }
+  }
 
   connectBtn2.onclick = async () => {
     if (window.ethereum) {
@@ -621,6 +621,7 @@ window.addEventListener('load', async () => {
   };
 });
 </script>
+
 <!-- SLOT 2 CODE END -->
 
 </body>
