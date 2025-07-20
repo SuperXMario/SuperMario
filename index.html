@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -374,129 +373,207 @@
 
   <footer>&copy; 2025 Super Mario Token. All rights reserved.</footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <!-- Chart Initialization -->
   <script>
-    window.addEventListener('DOMContentLoaded', async () => {
-      // 1) Provider-Check
-      if (!window.ethereum) {
-        alert("Bitte MetaMask installieren und die Seite per http(s) aufrufen");
-        return;
-      }
-      const web3 = new Web3(window.ethereum);
-
-      // ABI- und Address-Definitionen
-      const SLOT_ADDRESS  = "0x3a05A65f5883A7DC67499ED3476068C13Cb2c803";
-      const SLOT_ABI      = [ /* … dein SLOT_ABI … */ ];
-      const SLOT2_ADDRESS = "0xe73f294D9C568e3F8E3110D5cbFE680Ba6e21Dbf";
-      const SLOT2_ABI     = [ /* … dein SLOT2_ABI … */ ];
-
-      // DOM-Elemente
-      const smtConnectBtn  = document.getElementById('smt-connect');
-      const smtPlayBtn     = document.getElementById('smt-play');
-      const smtStatus      = document.getElementById('smt-status');
-      const smt2ConnectBtn = document.getElementById('smt2-connect');
-      const smt2PlayBtn    = document.getElementById('smt2-play');
-      const smt2Status     = document.getElementById('smt2-status');
-      const slotReel2      = document.getElementById('slot2-reel');
-
-      let userAccount, userAccount2;
-      let slotContract, slotContract2;
-
-      // Slot 1: Connect
-      smtConnectBtn.addEventListener('click', async () => {
-        try {
-          const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-          userAccount = accounts[0];
-          slotContract = new web3.eth.Contract(SLOT_ABI, SLOT_ADDRESS);
-          smtStatus.textContent = `${userAccount.slice(0,6)}…${userAccount.slice(-4)}`;
-          smtPlayBtn.disabled = false;
-        } catch (e) {
-          console.error(e);
-          smtStatus.textContent = '❌ Connection failed';
-        }
-      });
-
-      // Slot 1: Play
-      smtPlayBtn.addEventListener('click', async () => {
-        smtStatus.textContent = '🎲 Spinning…';
-        try {
-          const tx = await slotContract.methods.play()
-            .send({ from: userAccount, value: web3.utils.toWei('0.01','ether') });
-          const { win, reward } = tx.events.Played.returnValues;
-          smtStatus.textContent = win
-            ? `🎉 You won ${reward} SMT!`
-            : '😢 Try again!';
-        } catch (e) {
-          console.error(e);
-          smtStatus.textContent = '❌ Error';
-        }
-      });
-
-      // Hilfsfunktion: auf BSC wechseln
-      async function switchToBSC() {
-        const chainId = await ethereum.request({ method: 'eth_chainId' });
-        if (chainId !== '0x38') {
-          try {
-            await ethereum.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x38' }]
-            });
-          } catch (err) {
-            if (err.code === 4902) {
-              await ethereum.request({
-                method: 'wallet_addEthereumChain',
-                params: [{
-                  chainId: '0x38',
-                  chainName: 'BNB Smart Chain',
-                  nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-                  rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                  blockExplorerUrls: ['https://bscscan.com']
-                }]
-              });
-            }
+    const ctx = document.getElementById('smtChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','Phase 6','Phase 7','Phase 8','Phase 9','Phase 10','Phase 11','Phase 12'],
+        datasets: [
+          {
+            label: 'SMT in Pool (B)',
+            data: [10,15,20,25,30,35,40,45,50,55,60,65],
+            borderColor: 'var(--color-red)',
+            backgroundColor: 'rgba(229,37,33,0.2)',
+            yAxisID: 'y1', tension: 0.3
+          },
+          {
+            label: 'Liquidity (USD)',
+            data: [2500,4000,7200,13700,26800,33000,39000,46000,52000,58000,63000,72000],
+            borderColor: '#1976d2',
+            backgroundColor: 'rgba(25,118,210,0.2)',
+            yAxisID: 'y2', tension: 0.3
           }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', labels: { color: '#333' } },
+          title: { display: true, text: 'SMT Supply & Liquidity Over Time', color: '#333' }
+        },
+        scales: {
+          y1: { type: 'linear', position: 'left', beginAtZero: true, title: { display: true, text: 'SMT in Pool (B)', color: '#333' }, ticks: { color: '#333' } },
+          y2: { type: 'linear', position: 'right', beginAtZero: true, title: { display: true, text: 'Liquidity (USD)', color: '#333' }, ticks: { color: '#333' }, grid: { drawOnChartArea: false } },
+          x:  { ticks: { color: '#333' }, grid: { color: 'rgba(0,0,0,0.1)' } }
         }
       }
-
-      // Slot 2: Connect
-      smt2ConnectBtn.addEventListener('click', async () => {
-        try {
-          await switchToBSC();
-          const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-          userAccount2 = accounts[0];
-          slotContract2 = new web3.eth.Contract(SLOT2_ABI, SLOT2_ADDRESS);
-          smt2Status.textContent = `Connected: ${userAccount2}`;
-          smt2PlayBtn.disabled = false;
-        } catch (e) {
-          console.error(e);
-          smt2Status.textContent = '❌ Connection failed';
-        }
-      });
-
-      // Slot 2: Play
-      smt2PlayBtn.addEventListener('click', async () => {
-        smt2Status.textContent = 'Playing…';
-        slotReel2.textContent = '🎰🎰🎰';
-        try {
-          const receipt = await slotContract2.methods.play()
-            .send({ from: userAccount2, value: web3.utils.toWei('0.02','ether') });
-          const evt = receipt.events.SlotResult || receipt.events.Played;
-          const won    = evt.returnValues.win ?? evt.returnValues.won;
-          const amount = evt.returnValues.reward ?? evt.returnValues.amountWon;
-          if (won) {
-            smt2Status.textContent = `🎉 You won ${amount/1e18} SMT!`;
-            slotReel2.textContent = '🍄🍄🍄';
-          } else {
-            smt2Status.textContent = '😢 Try again!';
-            slotReel2.textContent = '💀💀💀';
-          }
-        } catch (e) {
-          console.error(e);
-          smt2Status.textContent = '❌ Transaction failed';
-          slotReel2.textContent = '💣💣💣';
-        }
-      });
     });
   </script>
+    <!-- SMT Slot Web3-Script: START -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <script>
+  const SLOT_ADDRESS = "0x3a05A65f5883A7DC67499ED3476068C13Cb2c803";
+  const SLOT_ABI = [
+    {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
+    {"anonymous":false,"inputs":[
+      {"indexed":true,"internalType":"address","name":"player","type":"address"},
+      {"indexed":false,"internalType":"bool","name":"win","type":"bool"},
+      {"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}
+    ],"name":"Played","type":"event"},
+    {"inputs":[],"name":"play","outputs":[],"stateMutability":"payable","type":"function"}
+  ];
+  const SLOT2_ADDRESS = "0xe73f294D9C568e3F8E3110D5cbFE680Ba6e21Dbf";
+  const SLOT2_ABI = [
+  {
+    "inputs": [{"internalType":"address","name":"_smtToken","type":"address"}],
+    "stateMutability":"nonpayable","type":"constructor"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {"indexed":true,"internalType":"address","name":"player","type":"address"},
+      {"indexed":false,"internalType":"bool","name":"win","type":"bool"},
+      {"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}
+    ],
+    "name":"Played","type":"event"
+  },
+  {
+    "inputs":[],"name":"play","outputs":[],"stateMutability":"payable","type":"function"
+  }
+];
+
+
+  let web3 = new Web3(window.ethereum);
+  let slotContract2;
+  let userAccount2;
+
+  async function initSlot2() {
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    userAccount2 = accounts[0];
+    slotContract2 = new web3.eth.Contract(SLOT2_ABI, SLOT2_ADDRESS);
+    document.getElementById("smt2-status").innerText = "✅ Connected";
+    document.getElementById("smt2-address").innerText = userAccount2;
+
+}
+  document.getElementById("smt2-connect").onclick = async () => {
+  try {
+    await initSlot2();
+    document.getElementById("smt2-play").disabled = false;
+  } catch (e) {
+    console.error(e);
+    document.getElementById("smt2-status").innerText = "❌ Connection failed";
+  }
+};
+
+  let slotContract, userAccount;
+
+  function getLastWinTime(wallet) {
+    const timestamp = localStorage.getItem("slot-win-" + wallet);
+    return timestamp ? parseInt(timestamp) : 0;
+  }
+
+  function setLastWinTime(wallet) {
+    const now = Math.floor(Date.now() / 1000);
+    localStorage.setItem("slot-win-" + wallet, now.toString());
+  }
+
+  function canWin(wallet) {
+    const lastWin = getLastWinTime(wallet);
+    const now = Math.floor(Date.now() / 1000);
+    return (now - lastWin) >= 172800; // 48h = 172800 seconds
+  }
+
+  document.getElementById("smt-connect").onclick = async () => {
+    if (!window.ethereum) return alert("Bitte MetaMask installieren");
+    await ethereum.request({ method: "eth_requestAccounts" });
+    const accounts = await web3.eth.getAccounts();
+    userAccount = accounts[0];
+    slotContract = new web3.eth.Contract(SLOT_ABI, SLOT_ADDRESS);
+    document.getElementById("smt-status").innerText =
+      userAccount.slice(0,6) + "..." + userAccount.slice(-4);
+    document.getElementById("smt-play").disabled = false;
+  };
+
+  document.getElementById("smt-play").onclick = async () => {
+    const value = web3.utils.toWei("0.01","ether");
+    document.getElementById("smt-status").innerText = "🎲 Spinning...";
+
+    try {
+      const tx = await slotContract.methods.play().send({ from: userAccount, value });
+      const { win, reward } = tx.events.Played.returnValues;
+
+      if (win) {
+        if (!canWin(userAccount)) {
+          document.getElementById("smt-status").innerText = "⏳ Wait 48h before next win!";
+          return;
+        }
+        setLastWinTime(userAccount);
+        document.getElementById("smt-status").innerText = `🎉 You won ${reward} SMT!`;
+      } else {
+        document.getElementById("smt-status").innerText = "😢 Try again!";
+      }
+    } catch (e) {
+      console.error(e);
+      document.getElementById("smt-status").innerText = "❌ Error";
+    }
+  };
+    // SLOT 2 CODE START
+window.addEventListener('load', async () => {
+  const connectBtn2 = document.getElementById('smt2-connect');
+  const playBtn2 = document.getElementById('smt2-play');
+  const statusText2 = document.getElementById('smt2-status');
+  const slotReel2 = document.getElementById('slot2-reel');
+
+  let userAccount2;
+  let web3_2;
+  let slotContract2;
+
+  connectBtn2.onclick = async () => {
+    if (window.ethereum) {
+      web3_2 = new Web3(window.ethereum);
+      try {
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        userAccount2 = accounts[0];
+        slotContract2 = new web3_2.eth.Contract(SLOT2_ABI, SLOT2_ADDRESS);
+        statusText2.textContent = 'Connected: ' + userAccount2;
+        playBtn2.disabled = false;
+      } catch (err) {
+        statusText2.textContent = 'Connection failed.';
+      }
+    } else {
+      statusText2.textContent = 'MetaMask not found.';
+    }
+  };
+
+  playBtn2.onclick = async () => {
+    if (!slotContract2) return;
+    try {
+      statusText2.textContent = 'Playing...';
+      slotReel2.textContent = '🎰🎰🎰';
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      await slotContract2.methods.play().send({
+        from: userAccount2,
+        value: web3_2.utils.toWei('0.02', 'ether')
+      });
+
+      statusText2.textContent = 'Slot played!';
+      slotReel2.textContent = '🍄🍄🍄';
+    } catch (error) {
+      console.error(error);
+      statusText2.textContent = 'Transaction failed.';
+      slotReel2.textContent = '💣💣💣';
+    }
+  };
+});
+// SLOT 2 CODE END
+
+</script>
+
+
 </body>
 </html>
