@@ -558,8 +558,12 @@ window.addEventListener('load', async () => {
 
       await slotContract2.methods.play().send({
         from: userAccount2,
-        value: web3_2.utils.toWei('0.02', 'ether')
+        value: web3_2.utils.toWei('0.02', 'ether'),
+        gas: 300000,
+        gasPrice: web3_2.utils.toWei('5', 'gwei')
       });
+
+
 
       statusText2.textContent = 'Slot played!';
       slotReel2.textContent = '🍄🍄🍄';
