@@ -559,8 +559,8 @@ window.addEventListener('load', async () => {
     await slotContract2.methods.play().send({
       from: userAccount2,
       value: web3_2.utils.toWei('0.02', 'ether')
-   
-    }).on('receipt', function(receipt) {
+    })
+    .on('receipt', function(receipt) {
       const events = receipt.events;
       if (events && events.SlotResult) {
         const won = events.SlotResult.returnValues.won;
