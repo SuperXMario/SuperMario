@@ -549,28 +549,49 @@ window.addEventListener('load', async () => {
   };
 
   playBtn2.onclick = async () => {
-    if (!slotContract2) return;
-    try {
-      statusText2.textContent = 'Playing...';
-      slotReel2.textContent = '🎰🎰🎰';
+  if (!slotContract2) return;
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
+  try {
+    statusText2.textContent = 'Playing...';
+    slotReel2.textContent = '🎰🎰🎰';
 
-      await slotContract2.methods.play().send({
-        from: userAccount2,
-        value: web3_2.utils.toWei('0.02', 'ether')
-      });
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-      statusText2.textContent = 'Slot played!';
-      slotReel2.textContent = '🍄🍄🍄';
-    } catch (error) {
-      console.error(error);
-      statusText2.textContent = 'Transaction failed.';
-      slotReel2.textContent = '💣💣💣';
+    await slotContract2.methods.play().send({
+      from: userAccount2,
+      value: web3_2.utils.toWei('0.02', 'ether')
+    })
+    .on('receipt', function (receipt) {
+      const events = receipt.events;
+      if (events && events.SlotResult) {
+        const won = events.SlotResult.returnValues.won;
+        const amount = events.SlotResult.returnValues.amountWon;
+
+        if (won === true || won === "true") {
+          statusText2.textContent = `🎉 You won ${amount / 1e18} SMT!`;
+          slotReel2.textContent = '🍄🍄🍄';
+        } else {
+          statusText2.textContent = '❌ No win this time.';
+          slotReel2.textContent = '💣💣💣';
+        }
+      } else {
+        statusText2.textContent = '❌ No result event found.';
+        slotReel2.textContent = '💣💣💣';
+      }
+    });
+
+  } catch (error) {
+    console.error('Transaction Error:', error);
+    if (error.code === 4001) {
+      // User rejected the transaction
+      statusText2.textContent = '❌ Transaction rejected.';
+    } else {
+      statusText2.textContent = '❌ Transaction failed.';
     }
-  };
-});
-// SLOT 2 CODE END
+    slotReel2.textContent = '💣💣💣';
+  }
+};
+
 
 </script>
 
