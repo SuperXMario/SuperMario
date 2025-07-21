@@ -551,9 +551,20 @@ window.addEventListener('load', async () => {
   playBtn2.onclick = async () => {
   if (!slotContract2) return;
 
+  const walletKey = `slot2-${userAccount2}`;
+  const winData = JSON.parse(localStorage.getItem(walletKey)) || { wins: 0, blockedUntil: 0 };
+  const now = Date.now();
+
+  // 96h Sperre nach 3 Gewinnen
+  if (winData.blockedUntil > now) {
+    const remaining = ((winData.blockedUntil - now) / 1000 / 60 / 60).toFixed(1);
+    statusText2.textContent = `⏳ You won 3× – please wait ${remaining}h`;
+    return;
+  }
+
   try {
     statusText2.textContent = 'Playing...';
-    slotReel2.textContent = '🎰🎰🎰';
+    slotReel2.textContent = '🏛🏛🏛';
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -561,7 +572,7 @@ window.addEventListener('load', async () => {
       from: userAccount2,
       value: web3_2.utils.toWei('0.02', 'ether')
     })
-    .on('receipt', function (receipt) {
+    .on('receipt', function(receipt) {
       const events = receipt.events;
       if (events && events.SlotResult) {
         const won = events.SlotResult.returnValues.won;
@@ -570,6 +581,14 @@ window.addEventListener('load', async () => {
         if (won === true || won === "true") {
           statusText2.textContent = `🎉 You won ${amount / 1e18} SMT!`;
           slotReel2.textContent = '🍄🍄🍄';
+
+          // Zähle Gewinne hoch
+          winData.wins += 1;
+          if (winData.wins >= 3) {
+            winData.blockedUntil = now + (96 * 60 * 60 * 1000); // 96h Sperre
+            winData.wins = 0; // reset count
+          }
+          localStorage.setItem(walletKey, JSON.stringify(winData));
         } else {
           statusText2.textContent = '❌ No win this time.';
           slotReel2.textContent = '💣💣💣';
@@ -579,15 +598,9 @@ window.addEventListener('load', async () => {
         slotReel2.textContent = '💣💣💣';
       }
     });
-
   } catch (error) {
-    console.error('Transaction Error:', error);
-    if (error.code === 4001) {
-      // User rejected the transaction
-      statusText2.textContent = '❌ Transaction rejected.';
-    } else {
-      statusText2.textContent = '❌ Transaction failed.';
-    }
+    console.error(error);
+    statusText2.textContent = 'Transaction failed.';
     slotReel2.textContent = '💣💣💣';
   }
 };
